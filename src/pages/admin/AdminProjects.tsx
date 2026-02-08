@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Eye, ExternalLink, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Eye, ExternalLink, Plus, Pencil, Trash2, X, Upload, Image } from 'lucide-react';
 import { useProjects } from '../../context/ProjectContext';
 import { categories } from '../../data/projects';
 
@@ -34,8 +34,56 @@ export default function AdminProjects() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [formData, setFormData] = useState<ProjectFormData>(emptyForm);
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+    const [uploadedThumbnail, setUploadedThumbnail] = useState<string>('');
+    const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+    const thumbnailInputRef = useRef<HTMLInputElement>(null);
+    const galleryInputRef = useRef<HTMLInputElement>(null);
 
     const selectedProject = projects.find((p) => p.id === viewProject);
+
+    // Convert file to base64
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // Handle thumbnail upload
+    const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const base64 = await fileToBase64(file);
+            setUploadedThumbnail(base64);
+            setFormData({ ...formData, thumbnail: base64 });
+        }
+    };
+
+    // Handle gallery images upload
+    const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files) {
+            const base64Images = await Promise.all(
+                Array.from(files).map((file) => fileToBase64(file))
+            );
+            setUploadedImages((prev) => [...prev, ...base64Images]);
+            const currentImages = formData.images ? formData.images.split('\n').filter(Boolean) : [];
+            setFormData({
+                ...formData,
+                images: [...currentImages, ...base64Images].join('\n'),
+            });
+        }
+    };
+
+    // Remove an uploaded gallery image
+    const removeUploadedImage = (index: number) => {
+        setUploadedImages((prev) => prev.filter((_, i) => i !== index));
+        const currentImages = formData.images.split('\n').filter(Boolean);
+        currentImages.splice(index, 1);
+        setFormData({ ...formData, images: currentImages.join('\n') });
+    };
 
     const handleEdit = (id: string) => {
         const project = projects.find((p) => p.id === id);
@@ -104,7 +152,7 @@ export default function AdminProjects() {
                         <ExternalLink className="w-4 h-4" /> View Store
                     </a>
                     <button
-                        onClick={() => { setShowForm(true); setEditingId(null); setFormData(emptyForm); }}
+                        onClick={() => { setShowForm(true); setEditingId(null); setFormData(emptyForm); setUploadedThumbnail(''); setUploadedImages([]); }}
                         className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
                     >
                         <Plus className="w-4 h-4" /> Add Project
@@ -262,24 +310,114 @@ export default function AdminProjects() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-black mb-1">Thumbnail URL</label>
-                                <input
-                                    value={formData.thumbnail}
-                                    onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
-                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
-                                    placeholder="https://images.unsplash.com/..."
-                                />
+                                <label className="block text-sm font-medium text-black mb-2">Thumbnail Image</label>
+                                <div className="space-y-3">
+                                    {/* Upload button */}
+                                    <div
+                                        onClick={() => thumbnailInputRef.current?.click()}
+                                        className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all"
+                                    >
+                                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                        <p className="text-sm text-gray-600">Click to upload from device</p>
+                                        <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 5MB</p>
+                                    </div>
+                                    <input
+                                        ref={thumbnailInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleThumbnailUpload}
+                                        className="hidden"
+                                    />
+
+                                    {/* Preview */}
+                                    {uploadedThumbnail && (
+                                        <div className="relative inline-block">
+                                            <img src={uploadedThumbnail} alt="Thumbnail preview" className="w-24 h-24 object-cover rounded-lg border" />
+                                            <button
+                                                type="button"
+                                                onClick={() => { setUploadedThumbnail(''); setFormData({ ...formData, thumbnail: '' }); }}
+                                                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* OR divider */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-px bg-gray-200"></div>
+                                        <span className="text-xs text-gray-400">OR paste URL</span>
+                                        <div className="flex-1 h-px bg-gray-200"></div>
+                                    </div>
+
+                                    {/* URL input */}
+                                    <input
+                                        value={formData.thumbnail.startsWith('data:') ? '' : formData.thumbnail}
+                                        onChange={(e) => { setFormData({ ...formData, thumbnail: e.target.value }); setUploadedThumbnail(''); }}
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 text-sm"
+                                        placeholder="https://images.unsplash.com/..."
+                                    />
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-black mb-1">Gallery Images (URLs, one per line)</label>
-                                <textarea
-                                    rows={2}
-                                    value={formData.images}
-                                    onChange={(e) => setFormData({ ...formData, images: e.target.value })}
-                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
-                                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                                />
+                                <label className="block text-sm font-medium text-black mb-2">Gallery Images</label>
+                                <div className="space-y-3">
+                                    {/* Upload button */}
+                                    <div
+                                        onClick={() => galleryInputRef.current?.click()}
+                                        className="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all"
+                                    >
+                                        <Image className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                        <p className="text-sm text-gray-600">Click to upload images</p>
+                                        <p className="text-xs text-gray-400 mt-1">Select multiple files</p>
+                                    </div>
+                                    <input
+                                        ref={galleryInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleGalleryUpload}
+                                        className="hidden"
+                                    />
+
+                                    {/* Previews */}
+                                    {uploadedImages.length > 0 && (
+                                        <div className="flex flex-wrap gap-2">
+                                            {uploadedImages.map((img, index) => (
+                                                <div key={index} className="relative">
+                                                    <img src={img} alt={`Gallery ${index + 1}`} className="w-16 h-16 object-cover rounded-lg border" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeUploadedImage(index)}
+                                                        className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* OR divider */}
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 h-px bg-gray-200"></div>
+                                        <span className="text-xs text-gray-400">OR paste URLs (one per line)</span>
+                                        <div className="flex-1 h-px bg-gray-200"></div>
+                                    </div>
+
+                                    {/* URL textarea */}
+                                    <textarea
+                                        rows={2}
+                                        value={formData.images.split('\n').filter(url => !url.startsWith('data:')).join('\n')}
+                                        onChange={(e) => {
+                                            const uploadedUrls = formData.images.split('\n').filter(url => url.startsWith('data:'));
+                                            setFormData({ ...formData, images: [...e.target.value.split('\n').filter(Boolean), ...uploadedUrls].join('\n') });
+                                        }}
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 text-sm"
+                                        placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                                    />
+                                </div>
                             </div>
 
                             <div className="flex gap-3 pt-4">
