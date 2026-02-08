@@ -8,11 +8,12 @@ import {
     Shield,
     Sparkles,
 } from 'lucide-react';
-import { projects } from '../data/projects';
+import { useProjects } from '../context/ProjectContext';
 import ProjectCard from '../components/ProjectCard';
 import CategoryFilter from '../components/CategoryFilter';
 
 export default function Home() {
+    const { projects } = useProjects();
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     const filteredProjects =

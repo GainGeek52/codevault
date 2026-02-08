@@ -1,8 +1,9 @@
 import { Package, Users, TrendingUp, Clock } from 'lucide-react';
-import { projects } from '../../data/projects';
+import { useProjects } from '../../context/ProjectContext';
 import { useAdmin } from '../../context/AdminContext';
 
 export default function AdminDashboard() {
+    const { projects } = useProjects();
     const { leads } = useAdmin();
 
     const stats = [
@@ -57,9 +58,9 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="text-right">
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${lead.status === 'new' ? 'bg-green-100 text-green-700' :
-                                            lead.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
-                                                lead.status === 'converted' ? 'bg-purple-100 text-purple-700' :
-                                                    'bg-gray-100 text-gray-700'
+                                        lead.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
+                                            lead.status === 'converted' ? 'bg-purple-100 text-purple-700' :
+                                                'bg-gray-100 text-gray-700'
                                         }`}>
                                         {lead.status}
                                     </span>

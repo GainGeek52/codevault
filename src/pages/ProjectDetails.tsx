@@ -1,12 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Check, ShoppingCart, CheckCircle } from 'lucide-react';
-import { projects } from '../data/projects';
+import { useProjects } from '../context/ProjectContext';
 import { useCart } from '../context/CartContext';
 import ImageCarousel from '../components/ImageCarousel';
 import LockedItem from '../components/LockedItem';
 
 export default function ProjectDetails() {
     const { id } = useParams<{ id: string }>();
+    const { projects } = useProjects();
     const { addToCart, isInCart } = useCart();
     const project = projects.find((p) => p.id === id);
 

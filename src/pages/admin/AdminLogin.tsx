@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Eye, EyeOff, Code2 } from 'lucide-react';
-import { useAdmin } from '../context/AdminContext';
+import { useAdmin } from '../../context/AdminContext';
 
 export default function AdminLogin() {
     const [password, setPassword] = useState('');
