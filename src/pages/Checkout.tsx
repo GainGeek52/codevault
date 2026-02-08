@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAdmin } from '../context/AdminContext';
 
 export default function Checkout() {
     const navigate = useNavigate();
     const { cart } = useCart();
+    const { addLead } = useAdmin();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -35,7 +37,20 @@ export default function Checkout() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
+
         const projectNames = cart.map((p) => p.title).join(', ');
+
+        // Save lead to admin context
+        addLead({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            whatsapp: formData.whatsapp,
+            message: formData.message,
+            projects: projectNames,
+        });
+
+        // Save for success page
         localStorage.setItem('checkoutData', JSON.stringify({ ...formData, projects: projectNames }));
         navigate('/success');
     };
