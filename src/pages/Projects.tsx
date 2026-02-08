@@ -12,10 +12,16 @@ export default function Projects() {
     const filteredProjects = projects.filter((project) => {
         const matchesCategory =
             selectedCategory === 'All' || project.category === selectedCategory;
+
+        const searchLower = searchQuery.toLowerCase();
         const matchesSearch =
             searchQuery === '' ||
-            project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            project.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+            project.title.toLowerCase().includes(searchLower) ||
+            project.shortDescription.toLowerCase().includes(searchLower) ||
+            project.fullDescription.toLowerCase().includes(searchLower) ||
+            project.techStack.some((tech) => tech.toLowerCase().includes(searchLower)) ||
+            project.features.some((feature) => feature.toLowerCase().includes(searchLower));
+
         return matchesCategory && matchesSearch;
     });
 

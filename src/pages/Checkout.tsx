@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { ArrowLeft, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAdmin } from '../context/AdminContext';
@@ -56,8 +56,7 @@ export default function Checkout() {
     };
 
     if (cart.length === 0) {
-        navigate('/cart');
-        return null;
+        return <Navigate to="/cart" replace />;
     }
 
     return (
@@ -109,7 +108,7 @@ export default function Checkout() {
                                 name="phone" value={formData.phone} onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.phone ? 'border-red-300 focus:ring-red-100' : 'border-gray-200 focus:ring-gray-200'
                                     }`}
-                                placeholder="+91 9999999999"
+                                placeholder="+91 8432997835"
                             />
                             {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                         </div>
@@ -120,7 +119,7 @@ export default function Checkout() {
                                 name="whatsapp" value={formData.whatsapp} onChange={handleChange}
                                 className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${errors.whatsapp ? 'border-red-300 focus:ring-red-100' : 'border-gray-200 focus:ring-gray-200'
                                     }`}
-                                placeholder="+91 9999999999"
+                                placeholder="+91 8432997835"
                             />
                             {errors.whatsapp && <p className="text-red-500 text-sm mt-1">{errors.whatsapp}</p>}
                         </div>

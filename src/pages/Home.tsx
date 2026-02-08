@@ -70,53 +70,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className="py-20 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {[
-                            {
-                                icon: Code2,
-                                title: 'Clean Code',
-                                description:
-                                    'Well-structured, documented, and maintainable codebase',
-                            },
-                            {
-                                icon: Layers,
-                                title: 'Modern Stack',
-                                description:
-                                    'Built with React, Node.js, TypeScript, and more',
-                            },
-                            {
-                                icon: Shield,
-                                title: 'Best Practices',
-                                description:
-                                    'Security, performance, and scalability considered',
-                            },
-                            {
-                                icon: Rocket,
-                                title: 'Quick Deploy',
-                                description:
-                                    'Ready to deploy with setup documentation included',
-                            },
-                        ].map((feature) => (
-                            <div
-                                key={feature.title}
-                                className="p-6 bg-white rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all"
-                            >
-                                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4">
-                                    <feature.icon className="w-6 h-6 text-white" />
-                                </div>
-                                <h3 className="text-lg font-semibold text-black mb-2">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-gray-600 text-sm">{feature.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
             {/* How It Works */}
             <section id="how-it-works" className="py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -216,6 +169,54 @@ export default function Home() {
                     )}
                 </div>
             </section>
+
+            {/* Features Section */}
+            <section className="py-20 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {[
+                            {
+                                icon: Code2,
+                                title: 'Clean Code',
+                                description:
+                                    'Well-structured, documented, and maintainable codebase',
+                            },
+                            {
+                                icon: Layers,
+                                title: 'Modern Stack',
+                                description:
+                                    'Built with React, Node.js, TypeScript, and more',
+                            },
+                            {
+                                icon: Shield,
+                                title: 'Best Practices',
+                                description:
+                                    'Security, performance, and scalability considered',
+                            },
+                            {
+                                icon: Rocket,
+                                title: 'Quick Deploy',
+                                description:
+                                    'Ready to deploy with setup documentation included',
+                            },
+                        ].map((feature) => (
+                            <div
+                                key={feature.title}
+                                className="p-6 bg-white rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all"
+                            >
+                                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4">
+                                    <feature.icon className="w-6 h-6 text-white" />
+                                </div>
+                                <h3 className="text-lg font-semibold text-black mb-2">
+                                    {feature.title}
+                                </h3>
+                                <p className="text-gray-600 text-sm">{feature.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
 
             {/* CTA Section */}
             <section className="py-20">

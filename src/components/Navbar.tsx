@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Code2 } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
@@ -21,9 +21,11 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <Code2 className="w-6 h-6 text-white" />
-                        </div>
+                        <img
+                            src="/logo.svg"
+                            alt="CodeVault Logo"
+                            className="w-10 h-10 rounded-lg group-hover:scale-105 transition-transform"
+                        />
                         <span className="text-xl font-bold text-black hidden sm:block">
                             CodeVault
                         </span>
@@ -36,8 +38,8 @@ export default function Navbar() {
                                 key={link.name}
                                 to={link.path}
                                 className={`text-sm font-medium transition-colors relative ${isActive(link.path)
-                                        ? 'text-black'
-                                        : 'text-gray-500 hover:text-black'
+                                    ? 'text-black'
+                                    : 'text-gray-500 hover:text-black'
                                     }`}
                             >
                                 {link.name}
@@ -80,8 +82,8 @@ export default function Navbar() {
             {/* Mobile Menu */}
             <div
                 className={`md:hidden transition-all duration-300 ease-in-out ${isOpen
-                        ? 'max-h-64 opacity-100'
-                        : 'max-h-0 opacity-0 overflow-hidden'
+                    ? 'max-h-64 opacity-100'
+                    : 'max-h-0 opacity-0 overflow-hidden'
                     }`}
             >
                 <div className="px-4 py-4 bg-white border-t border-gray-100 space-y-2">
@@ -91,8 +93,8 @@ export default function Navbar() {
                             to={link.path}
                             onClick={() => setIsOpen(false)}
                             className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive(link.path)
-                                    ? 'bg-black text-white'
-                                    : 'text-gray-700 hover:bg-gray-100'
+                                ? 'bg-black text-white'
+                                : 'text-gray-700 hover:bg-gray-100'
                                 }`}
                         >
                             {link.name}

@@ -34,12 +34,9 @@ export const projects: Project[] = [
     shortDescription: 'Full-featured online store with cart, checkout, and admin panel.',
     fullDescription: 'A complete e-commerce solution built with modern technologies. Features include product management, inventory tracking, order processing, customer accounts, and a powerful admin dashboard. Perfect for launching your online business.',
     category: 'E-commerce',
-    techStack: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Tailwind CSS'],
+    techStack: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS'],
     features: [
       'Product catalog with filters and search',
-      'Shopping cart with persistent storage',
-      'Secure checkout with Stripe integration',
-      'Admin dashboard for order management',
       'Customer authentication and profiles',
       'Inventory management system',
       'Email notifications',

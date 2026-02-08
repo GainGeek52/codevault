@@ -5,6 +5,7 @@ import { ProjectProvider } from './context/ProjectContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AdminLayout from './components/AdminLayout';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProjectDetails from './pages/ProjectDetails';
@@ -22,6 +23,7 @@ function App() {
       <AdminProvider>
         <CartProvider>
           <Router>
+            <ScrollToTop />
             <Routes>
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
