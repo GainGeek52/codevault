@@ -50,14 +50,14 @@ export default function Footer() {
                         <h3 className="font-semibold mb-4">Contact Us</h3>
                         <div className="space-y-3">
                             <a
-                                href="mailto:contact@codevault.com"
+                                href="mailto:unitbuckspro@gmail.com"
                                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
                             >
                                 <Mail className="w-4 h-4" />
-                                contact@codevault.com
+                                unitbuckspro@gmail.com
                             </a>
                             <a
-                                href="https://wa.me/919999999999"
+                                href="https://wa.me/918432997835"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"

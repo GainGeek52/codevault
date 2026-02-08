@@ -29,23 +29,21 @@ export default function Success() {
         if (countdown > 0) {
             const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
+        } else if (checkoutData) {
+            window.location.href = generateWhatsAppLink();
         }
-    }, [countdown]);
+    }, [countdown, checkoutData]);
 
     const generateWhatsAppLink = () => {
-        if (!checkoutData) return 'https://wa.me/919999999999';
+        if (!checkoutData) return 'https://wa.me/918432997835';
         const message = `Hi! I'm ${checkoutData.name}.
-
 I'm interested in the following projects:
 ${checkoutData.projects}
-
 ${checkoutData.message ? `Additional notes: ${checkoutData.message}` : ''}
-
 Please let me know the pricing and next steps.
-
 Contact: ${checkoutData.phone}
 Email: ${checkoutData.email}`;
-        return `https://wa.me/919999999999?text=${encodeURIComponent(message)}`;
+        return `https://wa.me/918432997835?text=${encodeURIComponent(message)}`;
     };
 
     return (
@@ -55,7 +53,7 @@ Email: ${checkoutData.email}`;
                     <CheckCircle className="w-10 h-10 text-white" />
                 </div>
 
-                <h1 className="text-3xl font-bold text-black mb-4">Request Submitted!</h1>
+                <h1 className="text-3xl font-bold text-black mb-4">Proceed To Connect on Whatsapp</h1>
                 <p className="text-gray-600 mb-8">
                     Thank you for your interest! Click below to connect with us on WhatsApp and we'll assist you further.
                 </p>
